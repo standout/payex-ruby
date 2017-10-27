@@ -23,7 +23,7 @@ PayEx.default_currency = 'SEK'
 my_order_id = 'c704acc45a4bec4c8cd50b73fb01a7c7'
 
 # Credit card example:
-payment_url = PayEx::Redirect.initialize!
+payment_url = PayEx.initialize!
   price: 14900, # (in cents)
   order_id: my_order_id,
   product_number: '123456',
@@ -33,7 +33,7 @@ payment_url = PayEx::Redirect.initialize!
   cancel_url: 'http://example.com/payex-cancel'
 
 # Swish example:
-payment_url = PayEx::Redirect.initialize!
+payment_url = PayEx.initialize!
   price: 14900, # (in cents)
   order_id: my_order_id,
   product_number: '123456',
