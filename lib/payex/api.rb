@@ -30,7 +30,7 @@ module PayEx::API
   end
 
   def invoke_raw! wsdl, name, body
-    Savon.client(wsdl: wsdl).call(name, soap_action: false, message: body).body
+    Savon.client(wsdl: wsdl, ssl_verify_mode: :none).call(name, soap_action: false, message: body).body
   end
 
   def signed_hash(string)

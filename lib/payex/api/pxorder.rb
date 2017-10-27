@@ -92,4 +92,77 @@ module PayEx::PxOrder
       }
     }
   end
+
+  def PurchaseInvoicePrivate(params)
+    PayEx::API.invoke! wsdl, :purchase_invoice_private, params, {
+      'accountNumber' => {
+        signed: true,
+        default: proc { PayEx.account_number! }
+      },
+      'orderRef' => {
+        signed: true
+      },
+      'customerRef' => {
+        signed: true
+      },
+      'customerName' => {
+        signed: true
+      },
+      'streetAddress' => {
+        signed: true
+      },
+      'coAddress' => {
+        signed: true
+      },
+      'postalCode' => {
+        signed: true
+      },
+      'city' => {
+        signed: true
+      },
+      'country' => {
+        signed: true
+      },
+      'socialSecurityNumber' => {
+        signed: true
+      },
+      'phoneNumber' => {
+        signed: true
+      },
+      'email' => {
+        signed: true
+      },
+      'productCode' => {
+        signed: true,
+        default: ''
+      },
+      'creditcheckRef' => {
+        signed: true,
+        default: ''
+      },
+      'mediaDistribution' => {
+        signed: true,
+        format: Integer
+      },
+      'invoiceText' => {
+        signed: true
+      },
+      'invoiceDate' => {
+        signed: true,
+        default: Time.now.strftime('%Y-%m-%d')
+      },
+      'invoiceDueDays' => {
+        signed: true,
+        default: 14
+      },
+      'invoiceNumber' => {
+        signed: true,
+        format: Integer
+      },
+      'invoiceLayout' => {
+        signed: true,
+        default: ''
+      }
+    }
+  end
 end
