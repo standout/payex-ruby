@@ -1,7 +1,7 @@
 module PayEx
   extend self
 
-  TEST_URL = 'https://test-external.payex.com'
+  TEST_URL = 'https://external.externaltest.payex.com'
   LIVE_URL = 'https://external.payex.com'
 
   attr_accessor :base_url
@@ -11,6 +11,29 @@ module PayEx
   attr_accessor :account_number
   attr_accessor :encryption_key
   attr_accessor :default_currency
+
+  def initialize!(params)
+    PayEx::PxOrder.Initialize8(
+      accountNumber: params[:account_number],
+      purchaseOperation: params[:purchase_operation],
+      price: params[:price],
+      priceArgList: params[:price_arg_list],
+      currency: params[:currency],
+      vat: params[:vat],
+      orderID: params[:order_id],
+      productNumber: params[:product_number],
+      description: params[:description],
+      clientIPAddress: params[:client_ip_address],
+      clientIdentifier: params[:client_identifier],
+      additionalValues: params[:additional_values],
+      externalID: params[:external_id],
+      returnUrl: params[:return_url],
+      view: params[:view],
+      agreementRef: params[:agreement_ref],
+      cancelUrl: params[:cancel_url],
+      clientLanguage: params[:client_language]
+    )
+  end
 
   def account_number!
     account_number or fail 'Please set PayEx.account_number'
@@ -30,4 +53,5 @@ class PayEx::Error::CardDeclined < PayEx::Error; end
 
 require 'payex/api'
 require 'payex/api/pxorder'
+require 'payex/direct'
 require 'payex/redirect'

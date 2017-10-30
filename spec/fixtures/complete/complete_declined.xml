@@ -23,8 +23,8 @@
             <orderStatus>0</orderStatus>
             <transactionRef>6d0b1a8e7ab2480583b32f52dba782fe</transactionRef>
             <transactionNumber>1024377</transactionNumber>
-            <orderId>SAMPLEORDERID0001</orderId>
-            <productId>SAMPLEPRODUCTNUMBER0001</productId>
+            <orderId>ORDERID1000</orderId>
+            <productId>PRODUCTNUMBER1000</productId>
             <paymentMethod>VISA</paymentMethod>
             <amount>12300</amount>
             <alreadyCompleted>False</alreadyCompleted>
@@ -35,7 +35,7 @@
               <transactionThirdPartyError>CARD_DECLINED</transactionThirdPartyError>
             </errorDetails>
             <clientAccount>0</clientAccount>
-            <productNumber>SAMPLEPRODUCTNUMBER0001</productNumber>
+            <productNumber>PRODUCTNUMBER1000</productNumber>
             <clientGsmNumber />
             <transactionFailedReason />
             <BankHash>00000001-4581-0903-5682-000000000000</BankHash>

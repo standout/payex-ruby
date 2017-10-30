@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <soap:Body>
+    <PurchaseInvoicePrivateResponse xmlns="http://external.payex.com/PxOrder/">
+      <PurchaseInvoicePrivateResult>
+        <![CDATA[
+          <?xml version="1.0" encoding="utf-8" ?>
+          <payex>
+            <header name="Payex Header v1.0">
+              <id>a92a59abea034ba3afacdf2f03d4710d</id>
+              <date>2017-10-27 07:15:43</date>
+            </header>
+            <status>
+              <code>OK</code>
+              <description>OK</description>
+              <errorCode>OK</errorCode>
+              <paramName />
+              <thirdPartyError />
+              <thirdPartySubError />
+            </status>
+            <transactionStatus>0</transactionStatus>
+            <transactionRef>8f1e5d836a344d06874ab205978e54dd</transactionRef>
+            <transactionNumber>16207900</transactionNumber>
+            <pending>false</pending>
+            <orderId>ORDERID1000</orderId>
+            <productId>PRODUCTNUMBER1000</productId>
+            <paymentMethod>INVOICE</paymentMethod>
+            <productNumber>PRODUCTNUMBER1000</productNumber>
+          </payex>
+        ]]>
+      </PurchaseInvoicePrivateResult>
+    </PurchaseInvoicePrivateResponse>
+  </soap:Body>
+</soap:Envelope>
