@@ -49,4 +49,35 @@ describe PayEx do
       href.should include :order_ref
     end
   end
+
+  describe '.create_agreement!' do
+    example 'successful agreement' do
+      expected = {
+        'accountNumber' => PAYEX_ACCOUNT_NUMBER,
+        'merchantRef' => 'test',
+        'description' => 'test',
+        'purchaseOperation' => 'SALE',
+        'maxAmount' => '1000000',
+        'notifyUrl' => '',
+        'startDate' => '',
+        'stopDate' => ''
+      }
+      expected['hash'] = PayEx::API.signed_hash(expected.values.join)
+
+      agreement_ok_fixture = File.read('spec/fixtures/agreement/create_agreement_ok.xml')
+      savon.expects(:create_agreement3).with(message: expected).returns(agreement_ok_fixture)
+
+      href = PayEx.create_agreement!(
+        account_number: expected.fetch('accountNumber'),
+        merchant_ref: expected.fetch('merchantRef'),
+        description: expected.fetch('description'),
+        purchase_operation: expected.fetch('purchaseOperation'),
+        max_amount: expected.fetch('maxAmount'),
+        notify_url: expected.fetch('notifyUrl'),
+        start_date: expected.fetch('startDate'),
+        stop_date: expected.fetch('stopDate')
+      )
+      href.should include "67d7e7d3b4134741a3297480dca6d899"
+    end
+  end
 end

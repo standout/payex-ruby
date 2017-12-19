@@ -35,6 +35,72 @@ module PayEx
     )
   end
 
+  def create_agreement!(params)
+    response = PayEx::PxAgreement.CreateAgreement3(
+      accountNumber: params[:account_number],
+      description: params[:description],
+      purchaseOperation: params[:purchase_operation],
+      maxAmount: params[:max_amount],
+      notifyUrl: params[:notify_url],
+      startDate: params[:start_date],
+      stopDate: params[:stop_date],
+      merchantRef: params[:merchant_ref],
+    )
+    error_code = response[:status][:error_code]
+    if error_code == 'OK'
+      error = nil
+    else
+      error = PayEx::Error.new "Agreement failed: #{error_code}"
+    end
+    [response[:agreement_ref], error]
+  end
+
+  def delete_agreement!(params)
+    response = PayEx::PxAgreement.DeleteAgreement(
+      accountNumber: params[:account_number],
+      agreementRef: params[:agreement_ref]
+    )
+  end
+
+  def check!(params)
+    response = PayEx::PxAgreement.Check(
+      accountNumber: params[:account_number],
+      agreementRef: params[:agreement_ref]
+    )
+
+    error_code = response[:status][:error_code]
+    if error_code == 'OK'
+      error = nil
+    else
+      error = PayEx::Error.new "Agreement failed: #{error_code}"
+    end
+    [response[:agreement_status], error, response]
+  end
+
+  def auto_pay!(params)
+    response = PayEx::PxAgreement.AutoPay3(
+      accountNumber: params[:account_number],
+      agreementRef: params[:agreement_ref],
+      price: params[:price],
+      productNumber: params[:product_number],
+      description: params[:description],
+      orderId: params[:order_id],
+      purchaseOperation: params[:purchase_operation],
+      currency: params[:currency]
+    )
+    status = response[:transaction_status]
+    status = PayEx::API.parse_transaction_status(status)
+
+    case status
+    when :sale, :authorize
+      error = nil
+    else
+      error = PayEx::Error.new('Transaction failed')
+    end
+
+    [response[:order_id], error, response]
+  end
+
   def account_number!
     account_number or fail 'Please set PayEx.account_number'
   end
@@ -53,5 +119,6 @@ class PayEx::Error::CardDeclined < PayEx::Error; end
 
 require 'payex/api'
 require 'payex/api/pxorder'
+require 'payex/api/pxagreement'
 require 'payex/direct'
 require 'payex/redirect'
