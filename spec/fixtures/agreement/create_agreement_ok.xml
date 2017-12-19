@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <soap:Body>
+    <CreateAgreement3Response xmlns="http://external.payex.com/PxAgreement/">
+      <CreateAgreement3Result>
+        <![CDATA[
+          <?xml version="1.0" encoding="utf-8" ?>
+          <payex>
+            <header name="Payex Header v1.0">
+              <id>07507411082c45aaa8a58f961a47b0f8</id>
+              <date>2012-09-26 14:07:42</date>
+            </header>
+            <status>
+              <code>OK</code>
+              <description>OK</description>
+              <errorCode>OK</errorCode>
+              <paramName />
+              <thirdPartyError />
+            </status>
+            <agreementRef>67d7e7d3b4134741a3297480dca6d899</agreementRef>
+          </payex>
+        ]]>
+      </CreateAgreement3Result>
+    </CreateAgreement3Response>
+  </soap:Body>
+</soap:Envelope>
