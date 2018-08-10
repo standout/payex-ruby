@@ -57,4 +57,85 @@ describe PayEx::API do
     PayEx::API.parse_params({ a: 1 }, { 'b' => { default: 2 } }).
       should == { 'a' => 1, 'b' => 2 }
   end
+
+  describe '#parse_param' do
+    context 'when format validation fails' do
+      context 'when resolve proc is present' do
+        it 'calls the proc' do
+          resolver = -> (v) { v[0..2].strip }
+
+          options = { format: /^[a-z]{,3}$/, resolve: resolver }
+
+          resolver.should_receive(:call).with('too long param').and_return('too')
+
+          PayEx::API.parse_param('too long param', options)
+        end
+
+        context 'when validation still fails after the proc has been called' do
+          it 'raises a ParamError' do
+            resolver = -> (v) { v[0..2].strip }
+
+            options = { format: /^[0-9]{,3}$/, resolve: resolver }
+
+            result = -> { PayEx::API.parse_param('too long param', options) }
+
+            result.should
+              raise_error PayEx::API::ParamError, 'must match /^[0-9]{,3}$/'
+          end
+        end
+      end
+    end
+
+    context 'when resolve is not present' do
+      it 'raises a ParamError' do
+        result = -> {
+          PayEx::API.parse_param(
+            'too long param',
+            { format: /^[a-z]{,3}$/ }
+          )
+        }
+
+        result.should
+          raise_error PayEx::API::ParamError, 'must match /^[a-z]{,3}$/'
+      end
+    end
+  end
+
+  describe '#resolver?' do
+    context 'when resolver respond to call' do
+      it 'returns true' do
+        resolver = -> { 'value' }
+
+        PayEx::API.resolver?(resolver).should == true
+      end
+    end
+
+    context 'when resolver does not respond to call' do
+      it 'returns false' do
+        resolver = 'value'
+
+        PayEx::API.resolver?(resolver).should == false
+      end
+    end
+  end
+
+  describe '#valid_param_format?' do
+    context 'when param format is valid' do
+      it 'returns true' do
+        options = { format: /^[a-z]{,3}$/ }
+        param = 'abc'
+
+        PayEx::API.valid_param_format?(param, options).should == true
+      end
+    end
+
+    context 'when param format is invalid' do
+      it 'returns false' do
+        options = { format: /^[a-z]{,3}$/ }
+        param = 123
+
+        PayEx::API.valid_param_format?(param, options).should == false
+      end
+    end
+  end
 end
