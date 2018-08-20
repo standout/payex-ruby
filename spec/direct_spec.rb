@@ -24,7 +24,7 @@ describe PayEx::Direct do
         'socialSecurityNumber' => '197610277373',
         'phoneNumber' => '0733123456',
         'email' => 'test@example.com',
-        'productCode' => SAMPLE_PRODUCT_NUMBER,
+        'productCode' => SAMPLE_PRODUCT_CODE,
         'creditcheckRef' => '',
         'mediaDistribution' => 1,
         'invoiceText' => 'Test',

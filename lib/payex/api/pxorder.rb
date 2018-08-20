@@ -97,63 +97,80 @@ module PayEx::PxOrder
     PayEx::API.invoke! wsdl, :purchase_invoice_private, params, {
       'accountNumber' => {
         signed: true,
-        default: proc { PayEx.account_number! }
+        default: -> { PayEx.account_number! }
       },
       'orderRef' => {
         signed: true
       },
       'customerRef' => {
-        signed: true
+        signed: true,
+        format: /\A[a-zA-Z0-9]{,15}\z/
       },
       'customerName' => {
-        signed: true
+        signed: true,
+        format: /\A[a-zA-Z0-9_:!;\"#<>=?\\[\\]@{}´\n\r %-\/À-ÖØ-öø-úü]{,35}\z/,
+        resolve: -> (v) { v[0..34].strip }
       },
       'streetAddress' => {
-        signed: true
+        signed: true,
+        format: /\A[a-zA-Z0-9_:!;\"#<>=?\\[\\]@{}´\n\r %-\/À-ÖØ-öø-úü]{,35}\z/
       },
       'coAddress' => {
-        signed: true
+        signed: true,
+        format: /\A[a-zA-Z0-9_:!;\"#<>=?\\[\\]@{}´\n\r %-\/À-ÖØ-öø-úü]{,35}\z/
       },
       'postalCode' => {
-        signed: true
+        signed: true,
+        format: /[A-Z0-9\-]{,9}/
       },
       'city' => {
-        signed: true
+        signed: true,
+        format: /\A[a-zA-Z0-9_:!;\"#<>=?\\[\\]@{}´\n\r %-\/À-ÖØ-öø-úü]{,27}\z/
       },
       'country' => {
-        signed: true
+        signed: true,
+        format: /\A[A-Z]{,2}\z/
       },
       'socialSecurityNumber' => {
-        signed: true
+        signed: true,
+        format: /\A[a-zA-Z0-9_:!;\"#<>=?\\[\\]@{}´\n\r %-\/À-ÖØ-öø-úü]{,15}\z/
       },
       'phoneNumber' => {
-        signed: true
+        signed: true,
+        format: /\A[a-zA-Z0-9_:!;\"#<>=?\\[\\]@{}´\n\r %-\/À-ÖØ-öø-úü]{,15}\z/,
+        resolve: -> (v) { v[0..14].strip }
       },
       'email' => {
-        signed: true
+        signed: true,
+        format: /\A.{,60}\z/
       },
       'productCode' => {
         signed: true,
-        default: ''
+        default: '',
+        format: /\A[a-zA-Z0-9_:!;\"#<>=?\\[\\]@{}´\n\r %-\/À-ÖØ-öø-úü]{,5}\z/
       },
       'creditcheckRef' => {
         signed: true,
-        default: ''
+        default: '',
+        format: /\A.{,32}\z/
       },
       'mediaDistribution' => {
         signed: true,
         format: Integer
       },
       'invoiceText' => {
-        signed: true
+        signed: true,
+        format: /\A.{,50}\z/
       },
       'invoiceDate' => {
         signed: true,
-        default: Time.now.strftime('%Y-%m-%d')
+        default: Time.now.strftime('%Y-%m-%d'),
+        format: /\A\d{4}-\d{2}-\d{2}\z/
       },
       'invoiceDueDays' => {
         signed: true,
-        default: 14
+        default: 14,
+        format: Integer
       },
       'invoiceNumber' => {
         signed: true,
@@ -161,7 +178,8 @@ module PayEx::PxOrder
       },
       'invoiceLayout' => {
         signed: true,
-        default: ''
+        default: '',
+        format: /\A.{,3960}\z/
       }
     }
   end

@@ -74,24 +74,25 @@ module PayEx::API
   end
 
   def parse_param(param, options)
-    unless options.is_a? Hash
-      raise ArgumentError, %{expected Hash, got #{options.inspect}}
-    end
+    value = param || options.fetch(:default) { param_error! 'parameter required' }
+    value = value.call if value.respond_to?(:call)
 
-    if param != nil
-      result = param
-    elsif options.include? :default
-      result = options[:default]
-      result = result.call if result.is_a? Proc
-    else
-      param_error! 'parameter required'
-    end
+    return value if valid_param_format?(value, options)
 
-    if options.include?(:format) and not options[:format] === result
-      param_error! %{must match #{options[:format].inspect}}
+    if resolver?(options[:resolve])
+      resolver = options[:resolve]
+      parse_param(resolver.call(value), except(options, :default, :resolve))
     else
-      result
+      param_error! %(must match #{options[:format].inspect})
     end
+  end
+
+  def except(options, *keys)
+    options.dup.tap { |o| keys.each { |k| o.delete(k) } }
+  end
+
+  def resolver?(resolver)
+    resolver.respond_to?(:call)
   end
 
   def param_error! message
@@ -109,5 +110,9 @@ module PayEx::API
     when '6' then :capture
     else status.to_s
     end
+  end
+
+  def valid_param_format?(param, options)
+    !options.include?(:format) || options[:format] === param
   end
 end
